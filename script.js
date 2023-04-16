@@ -2,54 +2,18 @@ let myLibrary = [];
 const tableRow = document.querySelector(".content_table");
 const bookValue = document.querySelector("#book_name");
 const authorValue = document.querySelector("#author");
-// const selected = document.getElementById("#selected");
+const selected = document.querySelector("#selected");
 const button = document.querySelector(".submit_btn");
 const pages = document.querySelector("#pages");
 const clearBtn = document.querySelector(".clear_btn");
 
-
-
-button.addEventListener("click", function () {
-    addBookToLibrary(new Book(bookValue.value, authorValue.value, pages.value, selected.value));
-});
-
-clearBtn.addEventListener("click", function(){
-    myLibrary = []
-    clearLibrary()
-});
-
-function Book(title, author, pages, read) {
+function Book(title, author, pages, selected) {
   this.title = title;
   this.author = author;
   this.pages = pages;
-  this.read = read;
-  this.finsihed = function () {
-    if (this.read === true) {
-      return "read";
-    } else {
-      return "not read";
-    }
-  };
-
-  this.info = function () {
-    if (read === true) {
-      return `${title} by ${author}, ${pages}, has been read`;
-    } else {
-      return `${title} by ${author}, ${pages}, not read yet`;
-    }
-  };
+  this.selected = selected;
 }
 
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, true);
-const gameOfThrones = new Book("Game of Thrones", "George", 300, true);
-const myBook = new Book("Song of Ice and Fire", "Random aurthor", 115, false);
-
-function addBookToLibrary(newBook) {
-  clearLibrary();
-  myLibrary.push(newBook);
-  showLibrary();
-  console.log(myLibrary);
-}
 
 function showLibrary() {
   for (i = 0; i < myLibrary.length; i++) {
@@ -59,7 +23,8 @@ function showLibrary() {
     bookEl.innerHTML = `<td> ${book.title} </td>
                             <td> ${book.author} </td>
                             <td> ${book.pages} </td>
-                            <td> ${book.finsihed()} </td>`;
+                            <td> ${book.selected} </td>
+                            <td><button class="clrBtn"> Clear </button> </td>`;
 
     tableRow.appendChild(bookEl);
   }
@@ -71,6 +36,35 @@ function clearLibrary() {
     info[i].remove();
   }
 }
+
+function addBookToLibrary() {
+  if (bookValue.value.length === 0 || authorValue.value.length === 0){
+    alert("Please, fill all the field");
+    return;
+  }
+  clearLibrary();
+
+  const newBook = new Book(bookValue.value, authorValue.value, pages.value, selected.value);
+
+  myLibrary.push(newBook);
+  showLibrary();
+  console.log(myLibrary);
+}
+
+button.addEventListener("click", function () {
+  event.preventDefault();
+  addBookToLibrary();
+});
+
+clearBtn.addEventListener("click", function () {
+  myLibrary = [];
+  clearLibrary();
+});
+
+
+const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, true);
+const gameOfThrones = new Book("Game of Thrones", "George", 300, true);
+const myBook = new Book("Song of Ice and Fire", "Random aurthor", 115, false);
 
 // addBookToLibrary(theHobbit);
 // addBookToLibrary(gameOfThrones);
